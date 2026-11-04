@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocietyHub - Society Management</title>
+    <script src="[cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link rel="stylesheet"
+        href="[cdnjs.cloudflare.com](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#7C3AED',
+                        accent: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-item.active {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+        }
+
+        .card-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-gray-900 text-white flex-shrink-0 transition-all duration-300">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-building text-primary"></i>
+                    SocietyHub
+                </h1>
+                <p class="text-gray-400 text-sm mt-1">Management Portal</p>
+            </div>
+            <nav class="p-4 space-y-2">
+                <a href="#" onclick="showSection('dashboard')"
+                    class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="dashboard">
+                    <i class="fas fa-th-large w-5"></i> Dashboard
+                </a>
+                <a href="#" onclick="showSection('residents')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="residents">
+                    <i class="fas fa-users w-5"></i> Residents
+                </a>
+                <a href="#" onclick="showSection('maintenance')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="maintenance">
+                    <i class="fas fa-wallet w-5"></i> Maintenance
+                </a>
+                <a href="#" onclick="showSection('complaints')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="complaints">
+                    <i class="fas fa-exclamation-circle w-5"></i> Complaints
+                </a>
+                <a href="#" onclick="showSection('announcements')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="announcements">
+                    <i class="fas fa-bullhorn w-5"></i> Announcements
+                </a>
+                <a href="#" onclick="showSection('facilities')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="facilities">
+                    <i class="fas fa-swimming-pool w-5"></i> Facilities
+                </a>
+                <a href="#" onclick="showSection('visitors')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="visitors">
+                    <i class="fas fa-id-card w-5"></i> Visitors
+                </a>
+                <a href="#" onclick="showSection('reports')"
+                    class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition"
+                    data-section="reports">
+                    <i class="fas fa-chart-bar w-5"></i> Reports
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Header -->
+            <header class="glass sticky top-0 z-10 px-6 py-4 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 id="pageTitle" class="text-xl font-semibold text-gray-800">Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative p-2 text-gray-600 hover:text-primary">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <img src="[ui-avatars.com](https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff)"
+                            alt="Admin" class="w-10 h-10 rounded-full">
+                        <div class="hidden md:block">
+                            <p class="text-sm font-medium text-gray-800">Admin User</p>
+                            <p class="text-xs text-gray-500">Society Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="p-6 space-y-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Units</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">156</p>
+                                <p class="text-accent text-sm mt-2"><i class="fas fa-arrow-up"></i> 12 occupied</p>
+                            </div>
+                            <div class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-home text-2xl text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Residents</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">428</p>
+                                <p class="text-accent text-sm mt-2"><i class="fas fa-arrow-up"></i> +5 this month</p>
+                            </div>
+                            <div class="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-users text-2xl text-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Pending Dues</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">₹2.4L</p>
+                                <p class="text-warning text-sm mt-2"><i class="fas fa-clock"></i> 23 overdue</p>
+                            </div>
+                            <div class="w-14 h-14 bg-warning/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-rupee-sign text-2xl text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Open Complaints</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">8</p>
+                                <p class="text-danger text-sm mt-2"><i class="fas fa-exclamation"></i> 2 urgent</p>
+                            </div>
+                            <div class="w-14 h-14 bg-danger/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-ticket-alt text-2xl text-danger"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Collection Chart -->
+                    <div class="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Monthly Collection</h3>
+                        <div class="h-64 flex items-end justify-around gap-2">
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary/20 rounded-t" style="height: 60%"></div>
+                                <span class="text-xs text-gray-500">Jan</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary/30 rounded-t" style="height: 75%"></div>
+                                <span class="text-xs text-gray-500">Feb</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary/40 rounded-t" style="height: 85%"></div>
+                                <span class="text-xs text-gray-500">Mar</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary/50 rounded-t" style="height: 70%"></div>
+                                <span class="text-xs text-gray-500">Apr</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary/60 rounded-t" style="height: 90%"></div>
+                                <span class="text-xs text-gray-500">May</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 bg-primary rounded-t" style="height: 95%"></div>
+                                <span class="text-xs text-gray-500">Jun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-accent text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-800">Payment received from A-101</p>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-warning/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-wrench text-warning text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-800">Complaint #1234 resolved</p>
+                                    <p class="text-xs text-gray-500">5 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user-plus text-primary text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-800">New resident added B-205</p>
+                                    <p class="text-xs text-gray-500">1 day ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-bullhorn text-secondary text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-800">AGM notice published</p>
+                                    <p class="text-xs text-gray-500">2 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming & Quick Actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Upcoming Events -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Events</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-4 p-3 bg-primary/5 rounded-lg">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold text-primary">15</p>
+                                    <p class="text-xs text-gray-500">JUN</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Annual General Meeting</p>
+                                    <p class="text-sm text-gray-500">Clubhouse, 10:00 AM</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-accent/5 rounded-lg">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold text-accent">20</p>
+                                    <p class="text-xs text-gray-500">JUN</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Water Tank Cleaning</p>
+                                    <p class="text-sm text-gray-500">All blocks, 6:00 AM</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-warning/5 rounded-lg">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold text-warning">25</p>
+                                    <p class="text-xs text-gray-500">JUN</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800">Maintenance Due Date</p>
+                                    <p class="text-sm text-gray-500">Q2 2026 dues</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="openModal('residentModal')"
+                                class="flex flex-col items-center gap-2 p-4 bg-primary/5 rounded-lg hover:bg-primary/10 transition">
+                                <i class="fas fa-user-plus text-2xl text-primary"></i>
+                                <span class="text-sm text-gray-700">Add Resident</span>
+                            </button>
+                            <button onclick="openModal('complaintModal')"
+                                class="flex flex-col items-center gap-2 p-4 bg-danger/5 rounded-lg hover:bg-danger/10 transition">
+                                <i class="fas fa-plus-circle text-2xl text-danger"></i>
+                                <span class="text-sm text-gray-700">New Complaint</span>
+                            </button>
+                            <button onclick="openModal('announcementModal')"
+                                class="flex flex-col items-center gap-2 p-4 bg-secondary/5 rounded-lg hover:bg-secondary/10 transition">
+                                <i class="fas fa-bullhorn text-2xl text-secondary"></i>
+                                <span class="text-sm text-gray-700">Announcement</span>
+                            </button>
+                            <button onclick="openModal('paymentModal')"
+                                class="flex flex-col items-center gap-2 p-4 bg-accent/5 rounded-lg hover:bg-accent/10 transition">
+                                <i class="fas fa-receipt text-2xl text-accent"></i>
+                                <span class="text-sm text-gray-700">Record Payment</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Residents Section -->
+            <section id="residents" class="p-6 space-y-6 hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <input type="text" id="residentSearch" placeholder="Search residents..."
+                                class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                                onkeyup="filterResidents()">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <select class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary"
+                            onchange="filterByBlock(this.value)">
+                            <option value="">All Blocks</option>
+                            <option value="A">Block A</option>
+                            <option value="B">Block B</option>
+                            <option value="C">Block C</option>
+                        </select>
+                    </div>
+                    <button onclick="openModal('residentModal')"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Resident
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Unit</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Resident</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Contact</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Balance</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="residentsTable" class="divide-y divide-gray-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Maintenance Section -->
+            <section id="maintenance" class="p-6 space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h4 class="text-gray-500 text-sm">Total Collected (Q2)</h4>
+                        <p class="text-3xl font-bold text-accent mt-2">₹12,45,000</p>
+                        <div class="mt-4 bg-gray-200 rounded-full h-2">
+                            <div class="bg-accent h-2 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">85% of target</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h4 class="text-gray-500 text-sm">Pending Amount</h4>
+                        <p class="text-3xl font-bold text-warning mt-2">₹2,40,000</p>
+                        <p class="text-sm text-gray-500 mt-4">23 units with dues</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <h4 class="text-gray-500 text-sm">Collection Rate</h4>
+                        <p class="text-3xl font-bold text-primary mt-2">85.2%</p>
+                        <p class="text-sm text-accent mt-4"><i class="fas fa-arrow-up"></i> +2.3% from last quarter</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Payment History</h3>
+                        <button onclick="openModal('paymentModal')"
+                            class="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent/90 transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Record Payment
+                        </button>
+                    </div>
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Unit</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Amount</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Method</th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTable" class="divide-y divide-gray-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Complaints Section -->
+            <section id="complaints" class="p-6 space-y-6 hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex gap-2">
+                        <button class="px-4 py-2 bg-primary text-white rounded-lg">All</button>
+                        <button class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50">Open</button>
+                        <button class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50">In
+                            Progress</button>
+                        <button class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50">Resolved</button>
+                    </div>
+                    <button onclick="openModal('complaintModal')"
+                        class="bg-danger text-white px-4 py-2 rounded-lg hover:bg-danger/90 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> New Complaint
+                    </button>
+                </div>
+
+                <div class="grid gap-4" id="complaintsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Announcements Section -->
+            <section id="announcements" class="p-6 space-y-6 hidden">
+                <div class="flex justify-end">
+                    <button onclick="openModal('announcementModal')"
+                        class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> New Announcement
+                    </button>
+                </div>
+
+                <div class="space-y-4" id="announcementsList">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Facilities Section -->
+            <section id="facilities" class="p-6 space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilitiesGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Visitors Section -->
+            <section id="visitors" class="p-6 space-y-6 hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Today's Visitors</h3>
+                    <button onclick="openModal('visitorModal')"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Log Visitor
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Visitor</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Visiting</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Purpose</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">In Time</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Out Time</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="visitorsTable" class="divide-y divide-gray-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="p-6 space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-file-invoice-dollar text-xl text-primary"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Financial Report</h4>
+                        <p class="text-sm text-gray-500 mt-1">Income, expenses, and balance sheet</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-users text-xl text-accent"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Occupancy Report</h4>
+                        <p class="text-sm text-gray-500 mt-1">Unit occupancy and vacancy details</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-warning/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-tools text-xl text-warning"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Maintenance Report</h4>
+                        <p class="text-sm text-gray-500 mt-1">Pending and completed maintenance</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-danger/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-exclamation-triangle text-xl text-danger"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Complaints Report</h4>
+                        <p class="text-sm text-gray-500 mt-1">Complaint statistics and resolution</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-id-badge text-xl text-secondary"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Visitor Report</h4>
+                        <p class="text-sm text-gray-500 mt-1">Visitor logs and statistics</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-download text-xl text-gray-600"></i>
+                        </div>
+                        <h4 class="font-semibold text-gray-800">Export Data</h4>
+                        <p class="text-sm text-gray-500 mt-1">Download reports in Excel/PDF</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Resident Modal -->
+    <div id="residentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Add New Resident</h3>
+                <button onclick="closeModal('residentModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="addResident(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
+                        <select class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                            <option value="A">Block A</option>
+                            <option value="B">Block B</option>
+                            <option value="C">Block C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Unit No.</label>
+                        <input type="text" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary"
+                            placeholder="e.g., 101" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" id="residentName"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary"
+                        required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="tel" id="residentPhone"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Resident Type</label>
+                    <select class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                        <option>Owner</option>
+                        <option>Tenant</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('residentModal')"
+                        class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">Add
+                        Resident</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Complaint Modal -->
+    <div id="complaintModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">New Complaint</h3>
+                <button onclick="closeModal('complaintModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="addComplaint(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                    <select class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                        <option value="">Select Unit</option>
+                        <option>A-101</option>
+                        <option>A-102</option>
+                        <option>B-201</option>
+                        <option>B-202</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select id="complaintCategory"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                        <option value="Plumbing">Plumbing</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Security">Security</option>
+                        <option value="Cleanliness">Cleanliness</option>
+                        <option value="Parking">Parking</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                    <select id="complaintPriority"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="complaintDesc" rows="3"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required></textarea>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('complaintModal')"
+                        class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-danger text-white rounded-lg hover:bg-danger/90">Submit
+                        Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Announcement Modal -->
+    <div id="announcementModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">New Announcement</h3>
+                <button onclick="closeModal('announcementModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="addAnnouncement(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" id="announcementTitle"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <select id="announcementType"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                        <option value="general">General</option>
+                        <option value="important">Important</option>
+                        <option value="event">Event</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea id="announcementMessage" rows="4"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required></textarea>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('announcementModal')"
+                        class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Record Payment</h3>
+                <button onclick="closeModal('paymentModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="addPayment(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                    <select id="paymentUnit" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary"
+                        required>
+                        <option value="">Select Unit</option>
+                        <option>A-101</option>
+                        <option>A-102</option>
+                        <option>B-201</option>
+                        <option>B-202</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Amount (₹)</label>
+                    <input type="number" id="paymentAmount"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                    <select id="paymentMethod"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                        <option>UPI</option>
+                        <option>Bank Transfer</option>
+                        <option>Cheque</option>
+                        <option>Cash</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Reference No.</label>
+                    <input type="text" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('paymentModal')"
+                        class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90">Record
+                        Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Visitor Modal -->
+    <div id="visitorModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Log Visitor</h3>
+                <button onclick="closeModal('visitorModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="addVisitor(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Visitor Name</label>
+                    <input type="text" id="visitorName"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="tel" id="visitorPhone"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Visiting Unit</label>
+                    <select id="visitorUnit" class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary"
+                        required>
+                        <option value="">Select Unit</option>
+                        <option>A-101</option>
+                        <option>A-102</option>
+                        <option>B-201</option>
+                        <option>B-202</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Purpose</label>
+                    <select id="visitorPurpose"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                        <option>Personal Visit</option>
+                        <option>Delivery</option>
+                        <option>Service/Repair</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('visitorModal')"
+                        class="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">Log Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Data Store
+        let residents = [
+            { id: 1, unit: 'A-101', block: 'A', name: 'Rahul Sharma', email: 'rahul@email.com', phone: '9876543210', type: 'Owner', balance: 0, status: 'Paid' },
+            { id: 2, unit: 'A-102', block: 'A', name: 'Priya Patel', email: 'priya@email.com', phone: '9876543211', type: 'Tenant', balance: 5000, status: 'Pending' },
+            { id: 3, unit: 'B-201', block: 'B', name: 'Amit Kumar', email: 'amit@email.com', phone: '9876543212', type: 'Owner', balance: 0, status: 'Paid' },
+            { id: 4, unit: 'B-202', block: 'B', name: 'Sneha Gupta', email: 'sneha@email.com', phone: '9876543213', type: 'Owner', balance: 10000, status: 'Overdue' },
+            { id: 5, unit: 'C-301', block: 'C', name: 'Vikram Singh', email: 'vikram@email.com', phone: '9876543214', type: 'Tenant', balance: 0, status: 'Paid' }
+        ];
+
+        let complaints = [
+            { id: 1001, unit: 'A-102', category: 'Plumbing', description: 'Water leakage in bathroom', priority: 'High', status: 'Open', date: '2026-06-01' },
+            { id: 1002, unit: 'B-201', category: 'Electrical', description: 'Common area lights not working', priority: 'Medium', status: 'In Progress', date: '2026-05-30' },
+            { id: 1003, unit: 'C-301', category: 'Security', description: 'CCTV camera not functioning', priority: 'Urgent', status: 'Open', date: '2026-06-02' }
+        ];
+
+        let announcements = [
+            { id: 1, title: 'Annual General Meeting', type: 'event', message: 'The AGM will be held on June 15th at 10:00 AM in the clubhouse. All residents are requested to attend.', date: '2026-06-01' },
+            { id: 2, title: 'Water Supply Interruption', type: 'maintenance', message: 'Water supply will be interrupted on June 20th from 6 AM to 12 PM for tank cleaning.', date: '2026-05-28' },
+            { id: 3, title: 'New Gym Equipment', type: 'general', message: 'We have added new equipment to the gym. Please follow the usage guidelines posted there.', date: '2026-05-25' }
+        ];
+
+        let payments = [
+            { id: 1, date: '2026-06-01', unit: 'A-101', amount: 5000, method: 'UPI', receipt: 'RCP001' },
+            { id: 2, date: '2026-05-28', unit: 'B-201', amount: 5000, method: 'Bank Transfer', receipt: 'RCP002' },
+            { id: 3, date: '2026-05-25', unit: 'C-301', amount: 5000, method: 'Cheque', receipt: 'RCP003' }
+        ];
+
+        let visitors = [
+            { id: 1, name: 'Delivery - Amazon', phone: '9998887776', unit: 'A-101', purpose: 'Delivery', inTime: '10:30 AM', outTime: '10:35 AM', status: 'Left' },
+            { id: 2, name: 'Ramesh Kumar', phone: '9998887775', unit: 'B-202', purpose: 'Personal Visit', inTime: '11:00 AM', outTime: '-', status: 'Inside' },
+            { id: 3, name: 'Electrician - Suresh', phone: '9998887774', unit: 'A-102', purpose: 'Service/Repair', inTime: '09:00 AM', outTime: '11:30 AM', status: 'Left' }
+        ];
+
+        let facilities = [
+            { id: 1, name: 'Swimming Pool', icon: 'fa-swimming-pool', status: 'Available', hours: '6 AM - 9 PM', bookings: 3 },
+            { id: 2, name: 'Gym', icon: 'fa-dumbbell', status: 'Available', hours: '5 AM - 10 PM', bookings: 8 },
+            { id: 3, name: 'Clubhouse', icon: 'fa-home', status: 'Booked', hours: 'On Request', bookings: 1 },
+            { id: 4, name: 'Tennis Court', icon: 'fa-table-tennis', status: 'Available', hours: '6 AM - 8 PM', bookings: 2 },
+            { id: 5, name: 'Party Hall', icon: 'fa-glass-cheers', status: 'Available', hours: 'On Request', bookings: 0 },
+            { id: 6, name: 'Kids Play Area', icon: 'fa-child', status: 'Available', hours: '8 AM - 8 PM', bookings: 0 }
+        ];
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionId) {
+                    item.classList.add('active');
+                }
+            });
+
+            const titles = {
+                dashboard: 'Dashboard',
+                residents: 'Residents Management',
+                maintenance: 'Maintenance & Payments',
+                complaints: 'Complaints',
+                announcements: 'Announcements',
+                facilities: 'Facilities',
+                visitors: 'Visitor Management',
+                reports: 'Reports'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId];
+
+            // Render section content
+            if (sectionId === 'residents') renderResidents();
+            if (sectionId === 'complaints') renderComplaints();
+            if (sectionId === 'announcements') renderAnnouncements();
+            if (sectionId === 'maintenance') renderPayments();
+            if (sectionId === 'facilities') renderFacilities();
+            if (sectionId === 'visitors') renderVisitors();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Render Functions
+        function renderResidents() {
+            const tbody = document.getElementById('residentsTable');
+            tbody.innerHTML = residents.map(r => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <span class="font-medium text-gray-800">${r.unit}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <img src="[ui-avatars.com](https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=random)" class="w-8 h-8 rounded-full">
+                            <div>
+                                <p class="font-medium text-gray-800">${r.name}</p>
+                                <p class="text-sm text-gray-500">${r.type}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-gray-800">${r.phone}</p>
+                        <p class="text-sm text-gray-500">${r.email}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${r.status === 'Paid' ? 'bg-accent/10 text-accent' :
+                    r.status === 'Pending' ? 'bg-warning/10 text-warning' :
+                        'bg-danger/10 text-danger'
+                }">${r.status}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="${r.balance > 0 ? 'text-danger' : 'text-accent'} font-medium">₹${r.balance.toLocaleString()}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <button class="p-2 text-gray-400 hover:text-primary"><i class="fas fa-eye"></i></button>
+                            <button class="p-2 text-gray-400 hover:text-primary"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteResident(${r.id})" class="p-2 text-gray-400 hover:text-danger"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderComplaints() {
+            const grid = document.getElementById('complaintsGrid');
+            grid.innerHTML = complaints.map(c => `
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${c.priority === 'Urgent' ? 'bg-danger/10' :
+                    c.priority === 'High' ? 'bg-warning/10' :
+                        'bg-gray-100'
+                }">
+                                <i class="fas ${c.category === 'Plumbing' ? 'fa-faucet' :
+                    c.category === 'Electrical' ? 'fa-bolt' :
+                        c.category === 'Security' ? 'fa-shield-alt' :
+                            'fa-wrench'
+                } ${c.priority === 'Urgent' ? 'text-danger' :
+                    c.priority === 'High' ? 'text-warning' :
+                        'text-gray-500'
+                }"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">#${c.id} - ${c.category}</p>
+                                <p class="text-sm text-gray-500">Unit ${c.unit} • ${c.date}</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${c.status === 'Open' ? 'bg-danger/10 text-danger' :
+                    c.status === 'In Progress' ? 'bg-warning/10 text-warning' :
+                        'bg-accent/10 text-accent'
+                }">${c.status}</span>
+                    </div>
+                    <p class="mt-4 text-gray-600">${c.description}</p>
+                    <div class="mt-4 flex items-center justify-between">
+                        <span class="text-sm ${c.priority === 'Urgent' ? 'text-danger' :
+                    c.priority === 'High' ? 'text-warning' :
+                        'text-gray-500'
+                }"><i class="fas fa-flag"></i> ${c.priority} Priority</span>
+                        <div class="flex gap-2">
+                            <button class="px-3 py-1 text-sm border rounded-lg hover:bg-gray-50">Update</button>
+                            <button class="px-3 py-1 text-sm bg-accent text-white rounded-lg hover:bg-accent/90">Resolve</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAnnouncements() {
+            const list = document.getElementById('announcementsList');
+            const typeStyles = {
+                general: { bg: 'bg-primary/10', icon: 'fa-info-circle', color: 'text-primary' },
+                important: { bg: 'bg-danger/10', icon: 'fa-exclamation-circle', color: 'text-danger' },
+                event: { bg: 'bg-secondary/10', icon: 'fa-calendar', color: 'text-secondary' },
+                maintenance: { bg: 'bg-warning/10', icon: 'fa-tools', color: 'text-warning' }
+            };
+
+            list.innerHTML = announcements.map(a => {
+                const style = typeStyles[a.type];
+                return `
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 ${style.bg} rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas ${style.icon} text-xl ${style.color}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">${a.title}</h4>
+                                        <p class="text-sm text-gray-500">${a.date}</p>
+                                    </div>
+                                    <span class="px-2 py-1 ${style.bg} ${style.color} text-xs rounded-full capitalize">${a.type}</span>
+                                </div>
+                                <p class="mt-3 text-gray-600">${a.message}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTable');
+            tbody.innerHTML = payments.map(p => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 text-gray-800">${p.date}</td>
+                    <td class="px-4 py-3 font-medium text-gray-800">${p.unit}</td>
+                    <td class="px-4 py-3 text-accent font-medium">₹${p.amount.toLocaleString()}</td>
+                    <td class="px-4 py-3 text-gray-600">${p.method}</td>
+                    <td class="px-4 py-3">
+                        <button class="text-primary hover:underline">${p.receipt}</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderFacilities() {
+            const grid = document.getElementById('facilitiesGrid');
+            grid.innerHTML = facilities.map(f => `
+                <div class="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center">
+                            <i class="fas ${f.icon} text-2xl text-primary"></i>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${f.status === 'Available' ? 'bg-accent/10 text-accent' : 'bg-warning/10 text-warning'
+                }">${f.status}</span>
+                    </div>
+                    <h4 class="font-semibold text-gray-800">${f.name}</h4>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-clock"></i> ${f.hours}</p>
+                    <p class="text-sm text-gray-500 mt-1"><i class="fas fa-calendar-check"></i> ${f.bookings} bookings today</p>
+                    <button class="mt-4 w-full py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition">
+                        Book Now
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderVisitors() {
+            const tbody = document.getElementById('visitorsTable');
+            tbody.innerHTML = visitors.map(v => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div>
+                            <p class="font-medium text-gray-800">${v.name}</p>
+                            <p class="text-sm text-gray-500">${v.phone}</p>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-800">${v.unit}</td>
+                    <td class="px-6 py-4 text-gray-600">${v.purpose}</td>
+                    <td class="px-6 py-4 text-gray-800">${v.inTime}</td>
+                    <td class="px-6 py-4 text-gray-800">${v.outTime}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${v.status === 'Inside' ? 'bg-accent/10 text-accent' : 'bg-gray-100 text-gray-600'
+                }">${v.status}</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Form Handlers
+        function addResident(e) {
+            e.preventDefault();
+            const name = document.getElementById('residentName').value;
+            const phone = document.getElementById('residentPhone').value;
+            residents.push({
+                id: residents.length + 1,
+                unit: 'A-' + (100 + residents.length + 1),
+                block: 'A',
+                name: name,
+                email: name.toLowerCase().replace(' ', '.') + '@email.com',
+                phone: phone,
+                type: 'Owner',
+                balance: 0,
+                status: 'Paid'
+            });
+            closeModal('residentModal');
+            renderResidents();
+            showToast('Resident added successfully!');
+            e.target.reset();
+        }
+
+        function addComplaint(e) {
+            e.preventDefault();
+            const category = document.getElementById('complaintCategory').value;
+            const priority = document.getElementById('complaintPriority').value;
+            const description = document.getElementById('complaintDesc').value;
+            complaints.unshift({
+                id: 1000 + complaints.length + 1,
+                unit: 'A-101',
+                category: category,
+                description: description,
+                priority: priority,
+                status: 'Open',
+                date: new Date().toISOString().split('T')[0]
+            });
+            closeModal('complaintModal');
+            renderComplaints();
+            showToast('Complaint submitted successfully!');
+            e.target.reset();
+        }
+
+        function addAnnouncement(e) {
+            e.preventDefault();
+            const title = document.getElementById('announcementTitle').value;
+            const type = document.getElementById('announcementType').value;
+            const message = document.getElementById('announcementMessage').value;
+            announcements.unshift({
+                id: announcements.length + 1,
+                title: title,
+                type: type,
+                message: message,
+                date: new Date().toISOString().split('T')[0]
+            });
+            closeModal('announcementModal');
+            renderAnnouncements();
+            showToast('Announcement published!');
+            e.target.reset();
+        }
+
+        function addPayment(e) {
+            e.preventDefault();
+            const unit = document.getElementById('paymentUnit').value;
+            const amount = parseInt(document.getElementById('paymentAmount').value);
+            const method = document.getElementById('paymentMethod').value;
+            payments.unshift({
+                id: payments.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                unit: unit,
+                amount: amount,
+                method: method,
+                receipt: 'RCP' + String(payments.length + 1).padStart(3, '0')
+            });
+            closeModal('paymentModal');
+            renderPayments();
+            showToast('Payment recorded successfully!');
+            e.target.reset();
+        }
+
+        function addVisitor(e) {
+            e.preventDefault();
+            const name = document.getElementById('visitorName').value;
+            const phone = document.getElementById('visitorPhone').value;
+            const unit = document.getElementById('visitorUnit').value;
+            const purpose = document.getElementById('visitorPurpose').value;
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            visitors.unshift({
+                id: visitors.length + 1,
+                name: name,
+                phone: phone,
+                unit: unit,
+                purpose: purpose,
+                inTime: time,
+                outTime: '-',
+                status: 'Inside'
+            });
+            closeModal('visitorModal');
+            renderVisitors();
+            showToast('Visitor logged successfully!');
+            e.target.reset();
+        }
+
+        function deleteResident(id) {
+            if (confirm('Are you sure you want to remove this resident?')) {
+                residents = residents.filter(r => r.id !== id);
+                renderResidents();
+                showToast('Resident removed.');
+            }
+        }
+
+        function filterResidents() {
+            const search = document.getElementById('residentSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#residentsTable tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        function filterByBlock(block) {
+            const filtered = block ? residents.filter(r => r.block === block) : residents;
+            const tbody = document.getElementById('residentsTable');
+            tbody.innerHTML = filtered.map(r => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4"><span class="font-medium text-gray-800">${r.unit}</span></td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <img src="[ui-avatars.com](https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=random)" class="w-8 h-8 rounded-full">
+                            <div>
+                                <p class="font-medium text-gray-800">${r.name}</p>
+                                <p class="text-sm text-gray-500">${r.type}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-gray-800">${r.phone}</p>
+                        <p class="text-sm text-gray-500">${r.email}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${r.status === 'Paid' ? 'bg-accent/10 text-accent' :
+                    r.status === 'Pending' ? 'bg-warning/10 text-warning' :
+                        'bg-danger/10 text-danger'
+                }">${r.status}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="${r.balance > 0 ? 'text-danger' : 'text-accent'} font-medium">₹${r.balance.toLocaleString()}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <button class="p-2 text-gray-400 hover:text-primary"><i class="fas fa-eye"></i></button>
+                            <button class="p-2 text-gray-400 hover:text-primary"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteResident(${r.id})" class="p-2 text-gray-400 hover:text-danger"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize
+        renderResidents();
+    </script>
+</body>
+
+</html>
